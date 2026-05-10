@@ -1,0 +1,70 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "Duck DNS" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - link "spec" [ref=e9] [cursor=pointer]:
+          - /url: spec.jsp
+        - link "about" [ref=e11] [cursor=pointer]:
+          - /url: about.jsp
+        - link "why" [ref=e13] [cursor=pointer]:
+          - /url: why.jsp
+        - link "install" [ref=e15] [cursor=pointer]:
+          - /url: install.jsp
+        - link "faqs" [ref=e17] [cursor=pointer]:
+          - /url: faqs.jsp
+        - link "logout" [ref=e19] [cursor=pointer]:
+          - /url: logout.jsp
+      - generic [ref=e21]:
+        - generic [ref=e22]: logged in with
+        - strong [ref=e23]: duran4000@github
+        - link "|||" [ref=e24] [cursor=pointer]:
+          - /url: "#"
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e28]:
+        - paragraph [ref=e31]
+        - generic [ref=e33]:
+          - heading "Duck DNS" [level=1] [ref=e34]
+          - generic [ref=e35]:
+            - heading "free dynamic DNS hosted on AWS" [level=2] [ref=e36]
+            - paragraph [ref=e37]:
+              - strong [ref=e38]: "news:"
+              - link "login with Reddit is no more" [ref=e39] [cursor=pointer]:
+                - /url: /reddit.jsp
+              - text: "- legal request"
+              - strong [ref=e40]: "support us:"
+              - text: become a
+              - link "Patreon" [ref=e41] [cursor=pointer]:
+                - /url: https://www.patreon.com/user?u=3209735&ty=h&u=3209735
+      - generic [ref=e45]:
+        - generic [ref=e46]: please complete the reCaptcha
+        - button ">>> reCaptcha <<<" [ref=e48] [cursor=pointer]
+        - text: This site is protected by reCAPTCHA and the Google
+        - link "Privacy Policy" [ref=e49] [cursor=pointer]:
+          - /url: https://policies.google.com/privacy
+        - text: and
+        - link "Terms of Service" [ref=e50] [cursor=pointer]:
+          - /url: https://policies.google.com/terms
+        - text: apply.
+  - contentinfo [ref=e51]:
+    - generic [ref=e54]:
+      - button "PayPal - The safer, easier way to pay online." [ref=e57] [cursor=pointer]
+      - generic [ref=e59]:
+        - link "฿ Bitcoin" [ref=e61] [cursor=pointer]:
+          - /url: http://www.bitcoin.org/
+        - link "16gHnv3NTjpF5ZavMi9QYBFxUkNchdicUS" [ref=e63] [cursor=pointer]:
+          - /url: bitcoin:16gHnv3NTjpF5ZavMi9QYBFxUkNchdicUS
+          - generic [ref=e64]: 16gHnv3NTjpF5ZavMi9QYBFxUkNchdicUS
+      - link "become a Patreon" [ref=e66] [cursor=pointer]:
+        - /url: https://www.patreon.com/user?u=3209735&ty=h&u=3209735
+        - img "become a Patreon" [ref=e67]
+      - link "join the community" [ref=e69] [cursor=pointer]:
+        - /url: https://groups.google.com/forum/#!forum/duckdns
+        - img "join the community" [ref=e70]
+      - generic [ref=e71]:
+        - link "Terms of Use" [ref=e72] [cursor=pointer]:
+          - /url: tac.jsp
+        - link "Privacy Statement" [ref=e73] [cursor=pointer]:
+          - /url: pp.jsp

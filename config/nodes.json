@@ -1,0 +1,11 @@
+{
+  "sshKeyPath": "/root/.ssh/id_ed25519",
+  "nodes": {
+    "100.64.0.2": { "name": "y9000p", "port": 2222, "user": "duran", "os": "windows" },
+    "100.64.0.3": { "name": "to-oa", "port": 2222, "user": "tu.work", "os": "windows" },
+    "100.64.0.6": { "name": "headscale", "port": 22, "user": "root", "os": "linux" },
+    "100.64.0.7": { "name": "dragon", "port": 2222, "user": "duran3000", "os": "linux" },
+    "100.64.0.8": { "name": "uos", "port": 2222, "user": "Administrator", "os": "linux" },
+    "100.64.0.5": { "name": "duran3000-cloud", "port": 2222, "user": "admin", "os": "windows" }
+  }
+}

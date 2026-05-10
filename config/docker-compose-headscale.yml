@@ -1,0 +1,21 @@
+services:
+  headscale:
+    image: headscale/headscale:latest
+    container_name: headscale
+    restart: unless-stopped
+    command: serve
+    read_only: true
+    tmpfs:
+      - /var/run/headscale
+    ports:
+      - "65437:443"
+      - "65438:9090"
+      - "65439:3478/udp"
+      - "65439:3478/tcp"
+    volumes:
+      - /etc/headscale:/etc/headscale:ro
+      - /var/lib/headscale:/var/lib/headscale
+    environment:
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "headscale", "health"]
