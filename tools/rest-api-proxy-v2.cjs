@@ -115,117 +115,71 @@ const getServerHost = () => {
     }
 };
 
-// Custom rename endpoint for nodes
+// Custom rename endpoint for nodes - uses CLI command
 app.post('/api/node/:id/rename', async (req, res) => {
     try {
         const nodeId = req.params.id;
         const { new_name } = req.body;
-        
+
         if (!new_name) {
             return res.status(400).json({ error: 'new_name is required' });
         }
-        
+
         console.log(`[${new Date().toISOString()}] RENAME request for node ${nodeId} to ${new_name}`);
-        
-        // Try PATCH method first
+
+        // Use CLI command to rename node
+        const { execSync } = require('child_process');
+
         try {
-            const patchResponse = await axios({
-                method: 'PATCH',
-                url: `${HEADSCALE_SERVER}/api/v1/node/${nodeId}`,
-                headers: {
-                    host: getServerHost(),
-                    'Authorization': `Bearer ${HEADSCALE_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                data: { givenName: new_name },
-                httpsAgent: httpsAgent,
-                validateStatus: () => true,
+            const output = execSync(`docker exec headscale headscale nodes rename "${new_name}" -i ${nodeId} --force`, {
+                encoding: 'utf8',
                 timeout: 30000
             });
-            
+
+            console.log(`[${new Date().toISOString()}] RENAME successful: ${output}`);
+
             // Add CORS headers
             res.set({
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
             });
-            
-            if (patchResponse.status === 200 || patchResponse.status === 204) {
-                console.log(`[${new Date().toISOString()}] RENAME successful via PATCH`);
-                return res.status(200).json({ 
-                    success: true, 
-                    message: 'Node renamed successfully',
-                    node: patchResponse.data 
-                });
-            }
-        } catch (patchError) {
-            console.log(`[${new Date().toISOString()}] PATCH failed: ${patchError.message}`);
-        }
-        
-        // If PATCH failed, try PUT method
-        try {
-            const putResponse = await axios({
-                method: 'PUT',
-                url: `${HEADSCALE_SERVER}/api/v1/node/${nodeId}`,
-                headers: {
-                    host: getServerHost(),
-                    'Authorization': `Bearer ${HEADSCALE_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                data: { givenName: new_name },
-                httpsAgent: httpsAgent,
-                validateStatus: () => true,
-                timeout: 30000
+
+            return res.status(200).json({
+                success: true,
+                message: 'Node renamed successfully',
+                output: output.trim()
             });
-            
+        } catch (execError) {
+            console.error(`[ERROR] CLI rename failed: ${execError.message}`);
+
             // Add CORS headers
             res.set({
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
             });
-            
-            if (putResponse.status === 200 || putResponse.status === 204) {
-                console.log(`[${new Date().toISOString()}] RENAME successful via PUT`);
-                return res.status(200).json({ 
-                    success: true, 
-                    message: 'Node renamed successfully',
-                    node: putResponse.data 
-                });
-            }
-        } catch (putError) {
-            console.log(`[${new Date().toISOString()}] PUT failed: ${putError.message}`);
+
+            return res.status(500).json({
+                error: 'Rename failed',
+                message: execError.message,
+                suggestion: `CLI command failed. Please check if node ID ${nodeId} is valid.`
+            });
         }
-        
-        // Add CORS headers
-        res.set({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        });
-        
-        // If both methods failed, return helpful error message
-        res.status(501).json({ 
-            error: 'Rename not supported by this Headscale version',
-            message: 'The REST API for renaming nodes is not implemented in this version of Headscale',
-            suggestion: 'Please use the Headscale CLI on your server: headscale nodes rename -i ' + nodeId + ' ' + new_name,
-            note: 'The rename functionality is available via CLI but not via REST API in current Headscale versions'
-        });
-        
+
     } catch (error) {
         console.error(`[ERROR] Rename failed: ${error.message}`);
-        
+
         // Add CORS headers
         res.set({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization'
         });
-        
+
         res.status(500).json({
             error: 'Rename failed',
-            message: error.message,
-            suggestion: 'Please use the Headscale CLI: headscale nodes rename -i ' + req.params.id + ' ' + req.body.new_name
+            message: error.message
         });
     }
 });
